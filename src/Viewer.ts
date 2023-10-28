@@ -2,10 +2,20 @@ import {
     Camera,
     CustomBlending,
     DepthFormat,
-    DepthTexture, MathUtils, Matrix4, Mesh, OneMinusSrcAlphaFactor, OrthographicCamera,
-    PerspectiveCamera, PlaneGeometry, Quaternion,
+    DepthTexture,
+    MathUtils,
+    Matrix4,
+    Mesh,
+    OneMinusSrcAlphaFactor,
+    OrthographicCamera,
+    PerspectiveCamera,
+    PlaneGeometry,
+    Quaternion,
     RGBAFormat,
-    Scene, ShaderMaterial, SrcAlphaFactor, UnsignedIntType,
+    Scene,
+    ShaderMaterial,
+    SrcAlphaFactor,
+    UnsignedIntType,
     Vector2,
     Vector3,
     WebGLRenderer,
@@ -22,27 +32,8 @@ import { createSortWorker } from './worker/SortWorker';
 import { Constants } from './Constants';
 import { SplatBuffer } from "./SplatBuffer";
 import { SplatTreeNode } from "./splattree/SplatTreeNode";
+import { LoadFileOptions, ViewerParams } from "./Viewer.types";
 
-interface ViewerParams {
-    cameraUp?: [number, number, number]
-    initialCameraPosition?: [number, number, number]
-    initialCameraLookAt?: [number, number, number]
-    selfDrivenMode?: boolean
-    useBuiltInControls?: boolean
-    scene?: Scene
-    simpleScene?: Scene
-    renderer?: WebGLRenderer
-    camera?: Camera
-    rootElement?: HTMLDivElement
-}
-
-
-interface LoadFileOptions {
-    position?: [number, number, number] | Vector3
-    orientation?: [number, number, number] | Quaternion
-    splatAlphaRemovalThreshold?: number
-    halfPrecisionCovariancesOnGPU?: boolean
-}
 
 const isArrayOfNumber = (value: unknown): value is number[] => {
     return Array.isArray(value) && value.every(item => typeof item === "number");
