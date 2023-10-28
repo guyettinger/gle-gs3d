@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>3D Gaussian Splat Demo - Stump</title>
+    <script type="importmap">
+        {
+            "imports": {
+                "gle-gs3d": "./lib/gs3d/esm/index.js"
+            }
+        }
+    </script>
+    <style>
+
+        body {
+            background-color: #000000;
+            height: 100vh;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<script type="module">
+    import { Viewer } from 'gle-gs3d';
+
+    const viewer = new Viewer({
+        'cameraUp': [0, -1, -1.0],
+        'initialCameraPosition': [-3.3816, 1.96931, -1.71890],
+        'initialCameraLookAt': [0.60910, 1.42099, 2.02511]
+    });
+    viewer.init();
+    viewer.loadFile('assets/data/stump/stump_high.splat', {
+        'halfPrecisionCovariancesOnGPU': true
+    })
+        .then(() => {
+            viewer.start();
+        });
+</script>
+</body>
+
+</html>

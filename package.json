@@ -1,0 +1,61 @@
+{
+    "name": "gle-gs3d",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/guyettinger/gle-gs3d"
+    },
+    "version": "1.0.0",
+    "description": "Three.js-based 3D Gaussian splat viewer",
+    "type": "module",
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "types": "dist/types.d.ts",
+    "author": "Guy Ettinger",
+    "license": "MIT",
+    "scripts": {
+        "build": "npm run clean && rollup -c --bundleConfigAsCjs",
+        "build-demo": "npm run build && mkdir -p ./demo && cp -r public/demo/. ./demo/ && mkdir -p ./demo/lib/gs3d && cp -r ./dist/* ./demo/lib/gs3d",
+        "clean": "rimraf dist",
+        "demo": "node util/server.js -d ./demo",
+        "watch": "npx npm-watch "
+    },
+    "watch": {
+        "build": {
+            "patterns": [
+                "src/**/*.ts"
+            ]
+        },
+        "build-demo": {
+            "patterns": [
+                "demo/**/*.*"
+            ]
+        }
+    },
+    "keywords": [
+        "three",
+        "threejs",
+        "three.js",
+        "splat",
+        "3D",
+        "gaussian"
+    ],
+    "dependencies": {
+        "three": "0.155.0"
+    },
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^25.0.4",
+        "@rollup/plugin-node-resolve": "^15.2.1",
+        "@rollup/plugin-terser": "^0.4.3",
+        "@rollup/plugin-typescript": "^11.1.4",
+        "@rollup/pluginutils": "5.0.5",
+        "@types/three": "^0.157.0",
+        "http-server": "14.1.1",
+        "npm-watch": "0.11.0",
+        "rimraf": "^5.0.5",
+        "rollup": "^3.29.4",
+        "rollup-plugin-dts": "^6.0.2",
+        "rollup-plugin-import-css": "^3.3.4",
+        "rollup-plugin-peer-deps-external": "^2.2.4",
+        "typescript": "^5.2.2"
+    }
+}

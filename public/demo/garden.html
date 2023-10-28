@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>3D Gaussian Splat Demo - Garden</title>
+    <script type="importmap">
+        {
+            "imports": {
+                "gle-gs3d": "./lib/gs3d/esm/index.js"
+            }
+        }
+    </script>
+    <style>
+
+        body {
+            background-color: #000000;
+            height: 100vh;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<script type="module">
+    import { Viewer } from 'gle-gs3d';
+
+    const viewer = new Viewer({
+        'cameraUp': [0, -1, -0.6],
+        'initialCameraPosition': [-1, -4, 6],
+        'initialCameraLookAt': [0, 4, 0]
+    });
+    viewer.init();
+    viewer.loadFile('assets/data/garden/garden_high.splat', {
+        'halfPrecisionCovariancesOnGPU': true
+    })
+        .then(() => {
+            viewer.start();
+        });
+</script>
+</body>
+
+</html>
