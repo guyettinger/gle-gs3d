@@ -169,3 +169,15 @@ Keyboard
 - `C` Toggles the mesh cursor, which shows where a ray projected from the mouse cursor intersects the splat mesh
 
 - `I` Toggles an info panel that displays the mesh cursor position, current FPS, and current window size
+## Deploy
+Shared Memory requires [Cross-origin Isolation to be configured](https://web.dev/articles/coop-coep) in deployment.  
+
+This can be achieved by setting response headers on your server:
+```
+response.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+response.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+```
+... or deploying [coi-serviceworker](https://github.com/gzuidhof/coi-serviceworker) in your webpage:
+```html
+<script src="coi-serviceworker.js"></script>
+```
