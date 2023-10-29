@@ -371,9 +371,11 @@ export class Viewer {
                 const splatCount = this.splatMesh.getSplatCount();
                 if (splatCount > 0) {
                     this.getRenderDimensions(renderDimensions);
-                    if (this.camera && this.camera instanceof PerspectiveCamera) {
-                        this.cameraFocalLength = (renderDimensions.y / 2.0) / Math.tan(this.camera.fov / 2.0 * MathUtils.DEG2RAD);
+                    let genericCamera = this.camera as any;
+                    if (genericCamera && genericCamera.fov) {
+                        this.cameraFocalLength = (renderDimensions.y / 2.0) / Math.tan(genericCamera.fov / 2.0 * MathUtils.DEG2RAD);
                         this.splatMesh.updateUniforms(renderDimensions, this.cameraFocalLength);
+                        console.log('camera', genericCamera)
                     }
                 }
             }
@@ -623,9 +625,10 @@ export class Viewer {
                 this.renderer.getSize(currentRendererSize);
                 if (currentRendererSize.x !== lastRendererSize.x || currentRendererSize.y !== lastRendererSize.y) {
                     if (!this.usingExternalCamera) {
-                        if (this.camera && this.camera instanceof PerspectiveCamera) {
-                            this.camera.aspect = currentRendererSize.x / currentRendererSize.y;
-                            this.camera.updateProjectionMatrix();
+                        const genericCamera = this.camera as any;
+                        if (genericCamera && genericCamera.aspect && genericCamera.updateProjectionMatrix) {
+                            genericCamera.aspect = currentRendererSize.x / currentRendererSize.y;
+                            genericCamera.updateProjectionMatrix();
                         }
                     }
                     if (this.splatRenderingInitialized) {
