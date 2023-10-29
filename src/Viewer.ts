@@ -372,7 +372,7 @@ export class Viewer {
                 if (splatCount > 0) {
                     this.getRenderDimensions(renderDimensions);
                     let genericCamera = this.camera as any;
-                    if (genericCamera && genericCamera.fov) {
+                    if (genericCamera && genericCamera.isPerspectiveCamera) {
                         this.cameraFocalLength = (renderDimensions.y / 2.0) / Math.tan(genericCamera.fov / 2.0 * MathUtils.DEG2RAD);
                         this.splatMesh.updateUniforms(renderDimensions, this.cameraFocalLength);
                         console.log('camera', genericCamera)
@@ -386,10 +386,10 @@ export class Viewer {
 
     loadFile(fileName: string, options: LoadFileOptions = {}): Promise<void> {
         if (options.position && isArrayOfNumber(options.position)) {
-            options.position = new Vector3().fromArray(options.position);
+            options.positionVector = new Vector3().fromArray(options.position);
         }
         if (options.orientation && isArrayOfNumber(options.orientation)) {
-            options.orientation = new Quaternion().fromArray(options.orientation);
+            options.orientationQuaternion = new Quaternion().fromArray(options.orientation);
         }
         options.splatAlphaRemovalThreshold = options.splatAlphaRemovalThreshold || 1;
         options.halfPrecisionCovariancesOnGPU = !!options.halfPrecisionCovariancesOnGPU;
@@ -423,15 +423,11 @@ export class Viewer {
                 .then((splatBuffer) => {
                     loadingSpinner.setMessage(`Processing splats...`);
                     window.setTimeout(() => {
-                        if ((options.position === undefined || options.position instanceof Vector3) && (options.orientation === undefined || options.orientation instanceof Quaternion)) {
-                            this.setupSplatMesh(splatBuffer, options.splatAlphaRemovalThreshold, options.position, options.orientation, options.halfPrecisionCovariancesOnGPU);
-                            this.setupSortWorker(splatBuffer).then(() => {
-                                loadingSpinner.hide();
-                                resolve();
-                            });
-                        } else {
-                            reject(new Error(`Viewer::loadFile -> invalid options for ${fileName}`));
-                        }
+                        this.setupSplatMesh(splatBuffer, options.splatAlphaRemovalThreshold, options.positionVector, options.orientationQuaternion, options.halfPrecisionCovariancesOnGPU);
+                        this.setupSortWorker(splatBuffer).then(() => {
+                            loadingSpinner.hide();
+                            resolve();
+                        });
                     }, 1);
                 })
                 .catch((e) => {
@@ -626,7 +622,7 @@ export class Viewer {
                 if (currentRendererSize.x !== lastRendererSize.x || currentRendererSize.y !== lastRendererSize.y) {
                     if (!this.usingExternalCamera) {
                         const genericCamera = this.camera as any;
-                        if (genericCamera && genericCamera.aspect && genericCamera.updateProjectionMatrix) {
+                        if (genericCamera && genericCamera.isPerspectiveCamera) {
                             genericCamera.aspect = currentRendererSize.x / currentRendererSize.y;
                             genericCamera.updateProjectionMatrix();
                         }

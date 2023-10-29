@@ -1,6 +1,6 @@
 {
     "name": "gle-gs3d",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Three.js-based 3D Gaussian splat viewer",
     "type": "module",
     "main": "dist/cjs/index.js",

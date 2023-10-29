@@ -14,8 +14,10 @@ export interface ViewerParams {
 }
 
 export interface LoadFileOptions {
-    position?: [number, number, number] | Vector3
-    orientation?: [number, number, number] | Quaternion
+    position?: [number, number, number]
+    positionVector?: Vector3,
+    orientation?: [number, number, number, number]
+    orientationQuaternion?: Quaternion
     splatAlphaRemovalThreshold?: number
     halfPrecisionCovariancesOnGPU?: boolean
 }

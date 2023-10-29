@@ -20,13 +20,14 @@ export class Raycaster {
         return function (this: Raycaster, camera: Camera, screenPosition: Vector2, screenDimensions: Vector2) {
             ndcCoords.x = screenPosition.x / screenDimensions.x * 2.0 - 1.0;
             ndcCoords.y = (screenDimensions.y - screenPosition.y) / screenDimensions.y * 2.0 - 1.0;
-            if (camera instanceof PerspectiveCamera) {
+            const genericCamera = camera as any;
+            if (genericCamera.isPerspectiveCamera) {
                 this.ray.origin.setFromMatrixPosition(camera.matrixWorld);
                 this.ray.direction.set(ndcCoords.x, ndcCoords.y, 0.5).unproject(camera).sub(this.ray.origin).normalize();
                 this.camera = camera;
-            } else if (camera instanceof OrthographicCamera) {
+            } else if (!genericCamera.isPerspectiveCamera) {
                 this.ray.origin.set(screenPosition.x, screenPosition.y,
-                    (camera.near + camera.far) / (camera.near - camera.far)).unproject(camera);
+                    (genericCamera.near + genericCamera.far) / (genericCamera.near - genericCamera.far)).unproject(camera);
                 this.ray.direction.set(0, 0, -1).transformDirection(camera.matrixWorld);
                 this.camera = camera;
             } else {
