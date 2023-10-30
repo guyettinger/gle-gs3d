@@ -21,7 +21,7 @@ export class PlyLoader {
         });
     }
 
-    loadFromFile(fileName: string,  onProgress: (progress: number, progressMessage: string, chunk?: Uint8Array) => void, compressionLevel: number = 0, minimumAlpha: number = 1): Promise<SplatBuffer> {
+    loadFromFile(fileName: string, onProgress: (progress: number, progressMessage: string, chunk?: Uint8Array) => void, compressionLevel: number = 0, minimumAlpha: number = 1): Promise<SplatBuffer> {
         return new Promise((resolve, reject) => {
             const loadPromise = this.fetchFile(fileName, onProgress);
             loadPromise

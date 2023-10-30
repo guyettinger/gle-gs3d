@@ -59,7 +59,7 @@ export const fetchWithProgress = function (path: any, onProgress: (progress: num
                 let _fileSize = data.headers.get('Content-Length');
                 let fileSize = _fileSize ? parseInt(_fileSize) : undefined;
 
-                const chunks:Uint8Array[] = [];
+                const chunks: Uint8Array[] = [];
 
                 while (true) {
                     try {
@@ -94,5 +94,9 @@ export const fetchWithProgress = function (path: any, onProgress: (progress: num
 };
 
 export const clamp = function (val: number, min: number, max: number): number {
-    return Math.max(Math.min(val, max), min);
-};
+    return Math.max(Math.min(val, max), min)
+}
+
+export const isArrayOfNumber = (value: unknown): value is number[] => {
+    return Array.isArray(value) && value.every(item => typeof item === "number")
+}

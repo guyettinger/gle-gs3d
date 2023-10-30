@@ -7,38 +7,25 @@ import {
     DataTexture,
     DataUtils,
     DoubleSide,
-    DynamicDrawUsage, FloatType, HalfFloatType,
+    DynamicDrawUsage,
+    FloatType,
+    HalfFloatType,
     InstancedBufferAttribute,
     InstancedBufferGeometry,
     Mesh,
     OneFactor,
-    OneMinusDstAlphaFactor, RGBAIntegerFormat, RGFormat,
-    ShaderMaterial, UnsignedIntType,
-    Vector2, Vector3,
+    OneMinusDstAlphaFactor,
+    RGBAIntegerFormat,
+    RGFormat,
+    ShaderMaterial,
+    UnsignedIntType,
+    Vector2,
     Vector4
 } from "three";
 import { SplatTree } from './splattree/SplatTree';
 import { SplatBuffer } from "./SplatBuffer";
-import { uintEncodedFloat, rgbaToInteger } from './Util';
-
-
-interface SpatDataTextureCovariances {
-    data: Float32Array | Uint16Array
-    texture: DataTexture
-    size: Vector2
-}
-
-interface SplatDataTextureCenterColors {
-    data: Uint32Array
-    texture: DataTexture
-    size: Vector2
-}
-
-interface SplatDataTextures {
-    covariances: SpatDataTextureCovariances
-    centerColors: SplatDataTextureCenterColors
-}
-
+import { rgbaToInteger, uintEncodedFloat } from './Util';
+import { SplatDataTextures } from "./SplatMesh.types";
 
 export class SplatMesh extends Mesh {
     centerColors?: Uint32Array;
@@ -54,7 +41,7 @@ export class SplatMesh extends Mesh {
     instancedBufferGeometry: InstancedBufferGeometry;
 
     static buildMesh(splatBuffer: SplatBuffer, splatAlphaRemovalThreshold: number = 1, halfPrecisionCovariancesOnGPU: boolean = false) {
-        const geometry = SplatMesh.buildGeomtery(splatBuffer);
+        const geometry = SplatMesh.buildGeometry(splatBuffer);
         const material = SplatMesh.buildMaterial();
         return new SplatMesh(splatBuffer, geometry, material, splatAlphaRemovalThreshold, halfPrecisionCovariancesOnGPU);
     }
@@ -267,12 +254,9 @@ export class SplatMesh extends Mesh {
         return material;
     }
 
-    static buildGeomtery(splatBuffer: any) {
-
+    static buildGeometry(splatBuffer: any) {
         const splatCount = splatBuffer.getSplatCount();
-
         const baseGeometry = new BufferGeometry();
-
         const positionsArray = new Float32Array(6 * 3);
         const positions = new BufferAttribute(positionsArray, 3);
         baseGeometry.setAttribute('position', positions);
@@ -296,7 +280,6 @@ export class SplatMesh extends Mesh {
     }
 
     buildSplatTree() {
-
         this.splatTree = new SplatTree(8, 5000);
         console.time('SplatTree build');
         const splatColor = new Vector4();
@@ -430,20 +413,19 @@ export class SplatMesh extends Mesh {
     }
 
     updateLocalCovarianceDataToDataTexture() {
-        if(!this.splatDataTextures || !this.covariances) return;
+        if (!this.splatDataTextures || !this.covariances) return;
         this.splatDataTextures.covariances.data.set(this.covariances);
         this.splatDataTextures.covariances.texture.needsUpdate = true;
     }
 
     updateLocalCenterColorDataToDataTexture() {
-        if(!this.splatDataTextures || !this.centerColors) return;
+        if (!this.splatDataTextures || !this.centerColors) return;
         this.splatDataTextures.centerColors.data.set(this.centerColors);
         this.splatDataTextures.centerColors.texture.needsUpdate = true;
     }
 
     updateIndexes(indexes: Uint32Array, renderSplatCount: number) {
         const geometry = this.instancedBufferGeometry;
-
         const splatIndex = geometry.attributes.splatIndex as InstancedBufferAttribute
         splatIndex.set(indexes);
         splatIndex.needsUpdate = true;

@@ -1,6 +1,7 @@
 // @ts-ignore
 import SorterWasm from './sorter.wasm';
 import { Constants } from '../Constants';
+import { Vector3Tuple } from "three";
 
 function sortWorker(self: any) {
 
@@ -16,7 +17,7 @@ function sortWorker(self: any) {
     let countsZero: Uint32Array;
     let Constants: any;
 
-    function sort(splatSortCount: number, splatRenderCount: number, viewProj: any, cameraPosition: [number, number, number]) {
+    function sort(splatSortCount: number, splatRenderCount: number, viewProj: any, cameraPosition: Vector3Tuple) {
 
         // console.time('WASM SORT');
         const sortStartTime = performance.now();

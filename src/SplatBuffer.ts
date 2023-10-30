@@ -197,7 +197,7 @@ export class SplatBuffer {
         return this.splatBufferData;
     }
 
-    getPosition(index: any, outPosition = new Vector3()) {
+    getPosition(index: number, outPosition = new Vector3()) {
         let bucket = [0, 0, 0];
         const positionBase = index * SplatBuffer.PositionComponentCount;
         if (this.compressionLevel > 0) {
@@ -223,7 +223,7 @@ export class SplatBuffer {
         return outPosition;
     }
 
-    setPosition(index: any, position: any) {
+    setPosition(index: number, position: Vector3) {
         let bucket = [0, 0, 0];
         const positionBase = index * SplatBuffer.PositionComponentCount;
         if (this.compressionLevel > 0) {

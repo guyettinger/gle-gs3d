@@ -33,11 +33,8 @@ import { Constants } from './Constants';
 import { SplatBuffer } from "./SplatBuffer";
 import { SplatTreeNode } from "./splattree/SplatTreeNode";
 import { LoadFileOptions, ViewerParams } from "./Viewer.types";
+import { isArrayOfNumber } from "./Util";
 
-
-const isArrayOfNumber = (value: unknown): value is number[] => {
-    return Array.isArray(value) && value.every(item => typeof item === "number");
-}
 
 const THREE_CAMERA_FOV = 60;
 
@@ -82,7 +79,6 @@ export class Viewer {
     usingExternalRenderer: boolean;
 
     constructor(params: ViewerParams = {}) {
-
         if (!params.cameraUp) params.cameraUp = [0, 1, 0];
         if (!params.initialCameraPosition) params.initialCameraPosition = [0, 10, 15];
         if (!params.initialCameraLookAt) params.initialCameraLookAt = [0, 0, 0];
@@ -288,7 +284,6 @@ export class Viewer {
             format: RGBAFormat,
             stencilBuffer: false,
             depthBuffer: true,
-
         });
         this.splatRenderTarget.depthTexture = new DepthTexture(width, height);
         this.splatRenderTarget.depthTexture.format = DepthFormat;
@@ -375,7 +370,6 @@ export class Viewer {
                     if (genericCamera && genericCamera.isPerspectiveCamera) {
                         this.cameraFocalLength = (renderDimensions.y / 2.0) / Math.tan(genericCamera.fov / 2.0 * MathUtils.DEG2RAD);
                         this.splatMesh.updateUniforms(renderDimensions, this.cameraFocalLength);
-                        console.log('camera', genericCamera)
                     }
                 }
             }
@@ -652,7 +646,6 @@ export class Viewer {
         }
         this.updateView();
         this.updateForRendererSizeChanges();
-
         this.rayCastScene();
         this.updateFPS();
         this.updateInfo();
@@ -695,19 +688,25 @@ export class Viewer {
         const renderDimensions = new Vector2();
 
         return function (this: Viewer) {
-            if (this.showInfo) {
-                if (this.splatMesh && this.camera && this.controls && this.sceneHelper && this.infoPanelCells) {
-                    const splatCount = this.splatMesh.getSplatCount();
-                    this.getRenderDimensions(renderDimensions);
+            if (this.showInfo && this.infoPanelCells) {
+                this.getRenderDimensions(renderDimensions);
 
+                // camera position
+                if (this.camera) {
                     const cameraPos = this.camera.position;
                     const cameraPosString = `[${cameraPos.x.toFixed(5)}, ${cameraPos.y.toFixed(5)}, ${cameraPos.z.toFixed(5)}]`;
                     this.infoPanelCells.cameraPosition.innerHTML = cameraPosString;
+                }
 
+                // camera look at
+                if (this.controls) {
                     const cameraLookAt = this.controls.target;
                     const cameraLookAtString = `[${cameraLookAt.x.toFixed(5)}, ${cameraLookAt.y.toFixed(5)}, ${cameraLookAt.z.toFixed(5)}]`;
                     this.infoPanelCells.cameraLookAt.innerHTML = cameraLookAtString;
+                }
 
+                // cursor position
+                if (this.sceneHelper) {
                     if (this.showMeshCursor) {
                         if (this.sceneHelper.meshCursor) {
                             const cursorPos = this.sceneHelper.meshCursor.position;
@@ -717,19 +716,26 @@ export class Viewer {
                     } else {
                         this.infoPanelCells.cursorPosition.innerHTML = 'N/A';
                     }
+                }
 
-                    this.infoPanelCells.fps.innerHTML = this.currentFPS.toString();
-                    this.infoPanelCells.renderWindow.innerHTML = `${renderDimensions.x} x ${renderDimensions.y}`;
+                // frames per second
+                this.infoPanelCells.fps.innerHTML = this.currentFPS.toString();
 
+                // render dimensions
+                this.infoPanelCells.renderWindow.innerHTML = `${renderDimensions.x} x ${renderDimensions.y}`;
+
+                // rendered splat count
+                if (this.splatMesh) {
+                    const splatCount = this.splatMesh.getSplatCount();
                     const renderPct = this.splatRenderCount / splatCount * 100;
                     this.infoPanelCells.renderSplatCount.innerHTML =
                         `${this.splatRenderCount} splats out of ${splatCount} (${renderPct.toFixed(2)}%)`;
-
-                    this.infoPanelCells.sortTime.innerHTML = `${this.lastSortTime.toFixed(3)} ms`;
                 }
+
+                // sort time
+                this.infoPanelCells.sortTime.innerHTML = `${this.lastSortTime.toFixed(3)} ms`;
             }
         };
-
     }();
 
     render() {
@@ -748,17 +754,17 @@ export class Viewer {
         };
 
         if (this.renderer && this.splatMesh && this.camera && this.scene && this.simpleScene) {
-            let defualtSceneHasRenderables = sceneHasRenderables(this.scene);
+            let defaultSceneHasRenderables = sceneHasRenderables(this.scene);
             let simpleSceneHasRenderables = sceneHasRenderables(this.simpleScene);
 
             // A more complex rendering sequence is required if you want to render "normal" js
             // objects along with the splats
-            if (defualtSceneHasRenderables || simpleSceneHasRenderables) {
+            if (defaultSceneHasRenderables || simpleSceneHasRenderables) {
                 if (this.renderTargetCopyCamera && this.splatRenderTarget && this.renderTargetCopyMaterial && this.renderTargetCopyQuad) {
                     this.renderer.setRenderTarget(this.splatRenderTarget);
                     this.renderer.clear(true, true, true);
                     this.renderer.getContext().colorMask(false, false, false, false);
-                    if (defualtSceneHasRenderables) this.renderer.render(this.scene, this.camera);
+                    if (defaultSceneHasRenderables) this.renderer.render(this.scene, this.camera);
                     if (simpleSceneHasRenderables) {
                         const simpleSceneOverrideMaterial = this.simpleScene.overrideMaterial;
                         this.simpleScene.overrideMaterial = this.simpleObjectDepthOverrideMaterial || null;
@@ -771,7 +777,7 @@ export class Viewer {
                     this.renderer.setRenderTarget(null);
                     this.renderer.clear(true, true, true);
 
-                    if (defualtSceneHasRenderables) this.renderer.render(this.scene, this.camera);
+                    if (defaultSceneHasRenderables) this.renderer.render(this.scene, this.camera);
                     if (simpleSceneHasRenderables) this.renderer.render(this.simpleScene, this.camera);
                     this.renderTargetCopyMaterial.uniforms.sourceColorTexture.value = this.splatRenderTarget.texture;
                     this.renderTargetCopyMaterial.uniforms.sourceDepthTexture.value = this.splatRenderTarget.depthTexture;
@@ -787,7 +793,7 @@ export class Viewer {
     updateView = function () {
 
         const tempMatrix = new Matrix4();
-        const cameraPositionArray: any = [];
+        const cameraPositionArray: number[] = [];
         const lastSortViewDir = new Vector3(0, 0, -1);
         const sortViewDir = new Vector3(0, 0, -1);
         const lastSortViewPos = new Vector3();

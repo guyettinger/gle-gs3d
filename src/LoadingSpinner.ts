@@ -75,7 +75,7 @@ export class LoadingSpinner {
         this.spinnerDivContainer.style.display = 'none';
     }
 
-    setMessage(msg: any) {
+    setMessage(msg: string) {
         this.messageDiv.innerHTML = msg;
     }
 }

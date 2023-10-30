@@ -10,7 +10,7 @@ export class SplatLoader {
         this.downLoadLink = null;
     }
 
-    loadFromFile(fileName: any, onProgress: any): Promise<SplatBuffer> {
+    loadFromFile(fileName: string, onProgress: (progress: number, progressMessage: string, chunk?: Uint8Array) => void): Promise<SplatBuffer> {
         return new Promise((resolve, reject) => {
             fetchWithProgress(fileName, onProgress)
                 .then((bufferData) => {

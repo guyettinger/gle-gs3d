@@ -1,12 +1,12 @@
 import {
     BoxGeometry, Camera,
-    Color,
+    Color, ColorRepresentation,
     ConeGeometry, FrontSide,
     Mesh,
     MeshBasicMaterial,
     Object3D, Scene,
     ShaderMaterial,
-    SphereGeometry, Vector3
+    SphereGeometry, Vector3, Vector3Tuple
 } from "three";
 
 export class SceneHelper {
@@ -80,7 +80,6 @@ export class SceneHelper {
 
     addDebugMeshes() {
         this.debugRoot = this.createDebugMeshes();
-        // @ts-expect-error TS(2554): Expected 1 arguments, but got 0.
         this.secondaryDebugRoot = this.createSecondaryDebugMeshes();
         this.simpleScene.add(this.debugRoot);
         this.simpleScene.add(this.secondaryDebugRoot);
@@ -90,7 +89,7 @@ export class SceneHelper {
         const sphereGeometry = new SphereGeometry(1, 32, 32);
         const debugMeshRoot = new Object3D();
 
-        const createMesh = (color: any, position: any) => {
+        const createMesh = (color: ColorRepresentation, position: Vector3Tuple) => {
             let sphereMesh = new Mesh(sphereGeometry, SceneHelper.buildDebugMaterial(color));
             if (renderOrder) {
                 sphereMesh.renderOrder = renderOrder;
@@ -108,7 +107,7 @@ export class SceneHelper {
         return debugMeshRoot;
     }
 
-    createSecondaryDebugMeshes(renderOrder: any) {
+    createSecondaryDebugMeshes(renderOrder: number = 0) {
         const boxGeometry = new BoxGeometry(3, 3, 3);
         const debugMeshRoot = new Object3D();
 
@@ -129,7 +128,7 @@ export class SceneHelper {
         return debugMeshRoot;
     }
 
-    static buildDebugMaterial(color: any) {
+    static buildDebugMaterial(color: ColorRepresentation) {
         const vertexShaderSource = `
             #include <common>
             varying float ndcDepth;

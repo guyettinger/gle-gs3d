@@ -1,9 +1,9 @@
-import { Camera, Quaternion, Scene, Vector3, WebGLRenderer } from "three";
+import { Camera, Quaternion, Scene, Vector3, Vector3Tuple, Vector4Tuple, WebGLRenderer } from "three";
 
 export interface ViewerParams {
-    cameraUp?: [number, number, number]
-    initialCameraPosition?: [number, number, number]
-    initialCameraLookAt?: [number, number, number]
+    cameraUp?: Vector3Tuple
+    initialCameraPosition?: Vector3Tuple
+    initialCameraLookAt?: Vector3Tuple
     selfDrivenMode?: boolean
     useBuiltInControls?: boolean
     scene?: Scene
@@ -14,9 +14,9 @@ export interface ViewerParams {
 }
 
 export interface LoadFileOptions {
-    position?: [number, number, number]
-    positionVector?: Vector3,
-    orientation?: [number, number, number, number]
+    position?: Vector3Tuple
+    positionVector?: Vector3
+    orientation?: Vector4Tuple
     orientationQuaternion?: Quaternion
     splatAlphaRemovalThreshold?: number
     halfPrecisionCovariancesOnGPU?: boolean

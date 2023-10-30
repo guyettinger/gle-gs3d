@@ -1,4 +1,4 @@
-import { DataUtils, Quaternion, Vector3 } from "three";
+import { DataUtils, Quaternion, Vector3, Vector3Tuple } from "three";
 import { SplatBuffer } from './SplatBuffer';
 import { clamp } from './Util';
 
@@ -24,7 +24,7 @@ interface RawVertex {
 
 interface SplatBucket {
     'splats': number[],
-    'center': [number, number, number]
+    'center': Vector3Tuple
 }
 
 export class PlyParser {
