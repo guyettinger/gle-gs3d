@@ -2,7 +2,7 @@
 A typescript port of Mark Kellogg's excellent [GaussianSplats3D](https://github.com/mkkellogg/GaussianSplats3D) project.
 
 ## Demo
-[demo](https://guyettinger.github.io/gle-scene-components/?path=/story/gle-scene-components-sceneview--gaussian-splat-clouds)
+[demo](https://gle-scene-components.vercel.app/?path=/story/gle-scene-components-scene--gaussian-splat-clouds)
 
 ## Building and running locally
 Install
