@@ -1,33 +1,21 @@
+<a href="/">
+    <img alt="logo" src="public/images/logo-flipped.png" align="right" width="120" height="120"/>
+</a>
+
 # GLE GS3D
 A typescript port of Mark Kellogg's excellent [GaussianSplats3D](https://github.com/mkkellogg/GaussianSplats3D) project.
 
-## Demo
-[demo](https://gle-scene-components.vercel.app/?path=/story/gle-scene-components-scene--gaussian-splat-clouds)
+[![Version](https://img.shields.io/npm/v/gle-gs3d?style=flat&colorA=000000&colorB=000000)](https://www.npmjs.com/package/gle-gs3d)
+[![Downloads](https://img.shields.io/npm/dt/gle-gs3d.svg?style=flat&colorA=000000&colorB=000000)](https://www.npmjs.com/package/gle-gs3d)
 
-## Building and running locally
-Install
+## Demo
+- [Storybook Demo](https://gle-scene-components.vercel.app/?path=/story/gle-scene-components-scene--gaussian-splat-clouds)
+
+## Installation
+```shell
+npm install gle-gs3d
 ```
-npm install
-```
-Build Library
-```
-npm run build
-```
-Build Demo
-```
-npm run build-demo
-```
-Run Demo
-```
-npm run demo
-```
-The demo will be accessible locally at [http://127.0.0.1:8080/index.html](http://127.0.0.1:8080/index.html). You will need to download the data for the demo scenes and extract them into 
-```
-<code directory>/public/demo/assets/data
-```
-The demo scene data is available here: [https://projects.markkellogg.org/downloads/gaussian_splat_data.zip](https://projects.markkellogg.org/downloads/gaussian_splat_data.zip)
-<br>
-<br>
+
 ## Usage
 
 To run the built-in viewer:
@@ -160,6 +148,32 @@ function update() {
     viewer.render();
 }
 ```
+
+## Building and running locally
+Install
+```
+npm install
+```
+Build Library
+```
+npm run build
+```
+Build Demo
+```
+npm run build-demo
+```
+Run Demo
+```
+npm run demo
+```
+The demo will be accessible locally at [http://127.0.0.1:8080/index.html](http://127.0.0.1:8080/index.html). You will need to download the data for the demo scenes and extract them into 
+```
+<code directory>/public/demo/assets/data
+```
+The demo scene data is available here: [https://projects.markkellogg.org/downloads/gaussian_splat_data.zip](https://projects.markkellogg.org/downloads/gaussian_splat_data.zip)
+<br>
+<br>
+
 ## Controls
 Mouse
 - Left click and drag to orbit around the focal point
